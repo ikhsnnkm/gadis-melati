@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Untuk Gadis Melati 🌸</title>
+<style>
+:root{
+  --bg1:#ffe4ee;--bg2:#ffc2d9;--card:rgba(255,255,255,.8);--text:#7a2447;--muted:#b0527d;
+  --btn:#e8508c;--btnText:#fff;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg1:#3a1428;--bg2:#5a1f3f;--card:rgba(40,12,28,.74);--text:#ffe1ee;--muted:#ff9cc3;--btn:#ff6aa5;--btnText:#3a1428;}
+}
+:root[data-theme="dark"]{--bg1:#3a1428;--bg2:#5a1f3f;--card:rgba(40,12,28,.74);--text:#ffe1ee;--muted:#ff9cc3;--btn:#ff6aa5;--btnText:#3a1428;}
+html,body{height:100%;margin:0}
+body{background:linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--text);font-family:"Quicksand","Segoe UI",system-ui,sans-serif;overflow:hidden;position:relative}
+#sky{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.petal{position:absolute;top:-40px;border-radius:80% 0 80% 0;opacity:.8;will-change:transform;animation:fall linear forwards}
+@keyframes fall{to{transform:translate3d(var(--dx),110vh,0) rotate(var(--rot))}}
+.burst{position:absolute;animation:pop 1.6s ease-out forwards}
+@keyframes pop{0%{transform:translate(0,0) scale(.2) rotate(0);opacity:1}100%{transform:translate(var(--bx),var(--by)) scale(1) rotate(200deg);opacity:0}}
+main{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 20px;gap:14px;text-align:center}
+.hero{width:min(38vw,160px);aspect-ratio:1;flex:none;animation:sway 5s ease-in-out infinite;transform-origin:50% 100%}
+.hero.breathe{animation:breathe 8s ease-in-out infinite;transform-origin:50% 50%}
+@media (max-height:640px){.hero{width:90px}}
+.hero .pt{transform-origin:50px 50px;animation:bloom 1.4s cubic-bezier(.2,.9,.3,1.3) backwards}
+@keyframes bloom{from{transform:rotate(var(--r)) scale(0)}to{transform:rotate(var(--r)) scale(1)}}
+@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes breathe{0%,100%{transform:scale(.85)}50%{transform:scale(1.3)}}
+.card{background:var(--card);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:26px;padding:22px 20px;width:100%;max-width:420px;max-height:46vh;overflow-y:auto;box-sizing:border-box;box-shadow:0 10px 30px rgba(232,80,140,.2);transition:opacity .5s,transform .5s}
+.card.out{opacity:0;transform:translateY(8px)}
+#ttl{margin:0 0 8px;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#msg{margin:0;font-size:1.05rem;line-height:1.7}
+.dots{display:flex;gap:7px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.3;transition:.3s}
+.dots i.on{opacity:1;transform:scale(1.3)}
+#btn{font:inherit;font-weight:700;font-size:1.05rem;border:0;border-radius:999px;padding:13px 36px;background:var(--btn);color:var(--btnText);box-shadow:0 6px 18px rgba(232,80,140,.4);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#btn:active{transform:scale(.96)}
+.from{font-size:.85rem;color:var(--muted)}
+#mute{position:fixed;z-index:5;right:14px;top:calc(12px + env(safe-area-inset-top,0px));width:44px;height:44px;border-radius:50%;border:0;background:var(--card);color:var(--text);font-size:1.2rem;cursor:pointer;display:none;box-shadow:0 4px 12px rgba(232,80,140,.25)}
+@media (prefers-reduced-motion:reduce){.petal{animation-duration:20s!important}.hero{animation:none}}
+</style>
+</head>
+<body>
+<div id="sky"></div>
+<button id="mute" aria-label="Musik">🎵</button>
+<main>
+  <svg class="hero" id="hero" viewBox="0 0 100 100" aria-hidden="true"></svg>
+  <div class="card" id="card"><p id="ttl"></p><p id="msg"></p></div>
+  <div class="dots" id="dots"></div>
+  <button id="btn">Mulai 🌸</button>
+  <div class="from">dari Sabiru, dengan sayang</div>
+</main>
+<script>
+var PENERIMA = "Gadis Melati", PENGIRIM = "Sabiru";
+var INTRO = {t:"Untuk " + PENERIMA, p:"Ada sesuatu kecil dari " + PENGIRIM + " buat kamu. Pelan-pelan saja bacanya, tidak perlu buru-buru. Kalau suaramu aktif, ada musik tenang yang menemani."};
+var PESAN = [
+ {t:"1 · Aku melihatmu", p:"Belakangan ini kamu memikul banyak hal sekaligus: beasiswa yang belum berhasil, urusan dengan orang tua, dan lelahnya belajar demi kampus impianmu. Aku tidak akan bilang semuanya baik-baik saja. Aku hanya ingin mengakui bahwa ini memang berat, dan wajar kalau kamu capek."},
+ {t:"2 · Tentang beasiswa", p:"Sebuah seleksi hanya menilai satu hari, satu berkas, dan satu kriteria. Ia tidak menilai kerja kerasmu, kecerdasanmu, atau mimpimu. Pintu yang tertutup tidak menghapus semua jalan. Kamu boleh sedih dulu, dan setelah itu kita cari pintu berikutnya bersama."},
+ {t:"3 · Tentang rumah", p:"Soal orang tua, kamu tidak harus menyelesaikannya hari ini, apalagi di tengah UTS. Kamu juga tidak harus kuat sendirian. Apa pun yang terjadi di sana, itu tidak mengurangi harga dirimu. Kalau kamu butuh bercerita, aku mau mendengarkan."},
+ {t:"4 · Tentang lelahmu", p:"Capek yang kamu rasakan bukan tanda kamu lemah. Itu tanda kamu sudah lama berusaha sungguh-sungguh. Mimpi besar memang melelahkan, tapi mimpi tidak menuntut kamu hancur untuk meraihnya. Istirahat bukan menyerah, ia bagian dari perjalanan."},
+ {t:"5 · Tarik napas dulu", p:"Ikuti bunganya. Saat ia membesar, tarik napas pelan. Saat ia mengecil, hembuskan perlahan. Ulangi tiga kali. Tidak ada yang perlu kamu kejar selama beberapa napas ini.", breathe:true},
+ {t:"6 · Untuk UTS", p:"Tugasmu hari ini bukan menjadi sempurna, tapi hadir dan berusaha sebisamu. Kerjakan satu soal dalam satu waktu. Kalau ada yang buntu, lewati dulu, lanjut, lalu kembali nanti. Nilai bisa naik dan turun, tapi kamu tetap " + PENERIMA + " yang kubanggakan."},
+ {t:"7 · Tiga hal kecil", p:"Minum air yang cukup. Makan yang teratur. Tidur secukupnya. Hal-hal sederhana ini juga cara menyayangi dirimu sendiri, terutama di minggu ujian."},
+ {t:"Dari " + PENGIRIM, p:"Kamu tidak sedang gagal. Kamu sedang bertumbuh, dan seperti bunga, setiap orang mekar pada waktunya sendiri. Aku di sini, menemani sampai UTS selesai dan sesudahnya. Semangat, " + PENERIMA + ". Aku sayang kamu. 🌸"}
+];
+
+var sky=document.getElementById("sky"), card=document.getElementById("card"), ttl=document.getElementById("ttl"),
+    msg=document.getElementById("msg"), btn=document.getElementById("btn"), dotsEl=document.getElementById("dots"),
+    hero=document.getElementById("hero"), mute=document.getElementById("mute");
+
+var h="";
+for (var i=0;i<8;i++) h+='<ellipse class="pt" style="--r:'+(i*45)+'deg;animation-delay:'+(i*0.1)+'s" cx="50" cy="26" rx="10" ry="19" fill="'+(i%2?"#ff8fb8":"#ff6aa5")+'" opacity=".92"/>';
+h+='<circle cx="50" cy="50" r="9" fill="#ffd84d"/><circle cx="47" cy="47" r="2.5" fill="#fff3a6"/>';
+hero.innerHTML=h;
+
+for (var d=0;d<PESAN.length;d++) dotsEl.appendChild(document.createElement("i"));
+var dots=dotsEl.children;
+
+function petal(){
+  var p=document.createElement("div"); p.className="petal";
+  var s=.6+Math.random()*.9;
+  p.style.left=Math.random()*100+"vw";
+  p.style.setProperty("--dx",(Math.random()*120-60)+"px");
+  p.style.setProperty("--rot",(Math.random()*720-360)+"deg");
+  p.style.width=14*s+"px"; p.style.height=18*s+"px";
+  p.style.animationDuration=(7+Math.random()*7)+"s";
+  p.style.background=["#ff8fb8","#ffb3cf","#ff6aa5","#ffd0e2"][Math.floor(Math.random()*4)];
+  sky.appendChild(p); setTimeout(function(){p.remove();},15000);
+}
+setInterval(petal,450);
+for (var k=0;k<10;k++) setTimeout(petal,k*200);
+
+function burst(x,y,n){
+  for (var i=0;i<n;i++){
+    var b=document.createElement("div"); b.className="burst";
+    b.textContent=["🌸","🌷","💗","🌺"][Math.floor(Math.random()*4)];
+    b.style.left=x+"px"; b.style.top=y+"px"; b.style.fontSize=(16+Math.random()*16)+"px";
+    var a=Math.random()*Math.PI*2, r=70+Math.random()*110;
+    b.style.setProperty("--bx",Math.cos(a)*r+"px"); b.style.setProperty("--by",Math.sin(a)*r+"px");
+    sky.appendChild(b); setTimeout(function(el){el.remove();},1700,b);
+  }
+}
+document.addEventListener("pointerdown",function(e){burst(e.clientX,e.clientY,6);});
+
+/* ===== Musik tenang (disintesis, tanpa file luar) ===== */
+var ac=null, master=null, wet=null, music=false, timer=null, bar=0, lastN=2;
+var CH=[[130.81,196.00,293.66,329.63],[110.00,164.81,261.63,329.63],[87.31,130.81,220.00,261.63],[98.00,146.83,246.94,293.66]];
+var PENT=[523.25,587.33,659.25,783.99,880.00,1046.5];
+function note(f,t,dur,vol,type,att){
+  var o=ac.createOscillator(), g=ac.createGain();
+  o.type=type; o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(vol,t+att);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(master); g.connect(wet); o.start(t); o.stop(t+dur+.1);
+}
+function nextBar(){
+  if(!music) return;
+  var t=ac.currentTime+.1, c=CH[bar%4];
+  for (var i=0;i<c.length;i++) note(c[i],t,7,i===0?.09:.05,"triangle",2);
+  for (var k=0;k<4;k++){
+    lastN=Math.max(0,Math.min(PENT.length-1,lastN+Math.floor(Math.random()*3)-1));
+    note(PENT[lastN],t+k*1.5+.3,3,.07,"sine",.02);
+  }
+  bar++; timer=setTimeout(nextBar,6000);
+}
+function startMusic(){
+  try{
+    if(!ac){
+      ac=new (window.AudioContext||window.webkitAudioContext)();
+      master=ac.createGain(); master.gain.value=0; master.connect(ac.destination);
+      var conv=ac.createConvolver(), len=ac.sampleRate*3, buf=ac.createBuffer(2,len,ac.sampleRate);
+      for (var ch=0;ch<2;ch++){var dt=buf.getChannelData(ch); for(var i=0;i<len;i++) dt[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.5);}
+      conv.buffer=buf; wet=ac.createGain(); wet.gain.value=.6; wet.connect(conv); conv.connect(master);
+    }
+    ac.resume(); music=true;
+    master.gain.cancelScheduledValues(ac.currentTime); master.gain.linearRampToValueAtTime(.55,ac.currentTime+4);
+    mute.textContent="🎵"; mute.style.display="block"; nextBar();
+  }catch(e){}
+}
+function stopMusic(){
+  music=false; clearTimeout(timer);
+  if(master){master.gain.cancelScheduledValues(ac.currentTime); master.gain.linearRampToValueAtTime(0,ac.currentTime+1);}
+  mute.textContent="🔇";
+}
+mute.addEventListener("click",function(e){e.stopPropagation(); music?stopMusic():startMusic();});
+document.addEventListener("visibilitychange",function(){
+  if(!ac) return;
+  if(document.hidden) ac.suspend(); else if(music) ac.resume();
+});
+
+/* ===== Alur pesan ===== */
+function show(m,i){
+  card.classList.add("out");
+  setTimeout(function(){
+    ttl.textContent=m.t; msg.textContent=m.p; card.scrollTop=0;
+    hero.classList.toggle("breathe",!!m.breathe);
+    card.classList.remove("out");
+    for (var j=0;j<dots.length;j++) dots[j].classList.toggle("on",i>=0&&j<=i);
+  },350);
+}
+var idx=-1;
+btn.addEventListener("click",function(){
+  var r=btn.getBoundingClientRect(); burst(r.left+r.width/2,r.top,10);
+  if(idx===-1 && !music) startMusic();
+  if(idx>=PESAN.length-1) idx=0; else idx++;
+  show(PESAN[idx],idx);
+  btn.textContent=idx===PESAN.length-1?"Baca lagi 💗":"Lanjut 🌸";
+  if(idx===PESAN.length-1) for(var q=0;q<25;q++) setTimeout(petal,q*80);
+});
+ttl.textContent=INTRO.t; msg.textContent=INTRO.p;
+</script>
+</body>
+</html>
